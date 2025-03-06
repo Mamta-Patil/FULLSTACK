@@ -82,6 +82,7 @@ const Layout = () => {
         <div className='px-8 py-5 mt-5'>
             <p className='text-blue-600'> Using Grid </p>
             <p className='text-xl text-blue-600 pb-5'>Cooking blog</p>
+            <button> </button>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-10">
                 {blogdata.map((el, index) => (
                     <div key={index}>

@@ -1,12 +1,12 @@
 
 import './App.css'
-import Layout from './Layout'
+import StepperComponent from './Stepper'
 
 function App() {
 
   return (
     <>
-      <Layout />
+      <StepperComponent/>
     </>
   )
 }

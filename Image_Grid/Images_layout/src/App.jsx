@@ -1,12 +1,12 @@
 
 import './App.css'
-import Layout from './Layout'
+import { Gallery } from './Gallery'
 
 function App() {
 
   return (
     <>
-      <Layout />
+      <Gallery />
     </>
   )
 }
