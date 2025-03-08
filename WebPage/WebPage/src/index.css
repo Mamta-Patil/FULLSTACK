@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Poppins:wght@500&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap'); */
+
+
+@font-face {
+    font-family: 'IbaraNova-Regular';
+    src: url('/fonts/IbarraRealNova-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'IbaraNova-Bold';
+    src: url('/fonts/IbarraRealNova-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    /* font-size: "20px"; */
+  }
+  
+  @font-face {
+    font-family: 'IbaraNova-Italic';
+    src: url('/fonts/IbarraRealNova-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+  }
+  
+  @font-face {
+    font-family: 'Jost-Regular';
+    src: url('/fonts/Jost-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: 'Jost-Italic';
+    src: url('/fonts/Jost-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  /* Declare Global Font Variables */
+  :root {
+    --font-ibara-regular: 'IbaraNova-Regular' ,sans-serif;
+    --font-ibara-bold: 'IbaraNova-Bold', sans-serif;
+    --font-ibara-italic: 'IbaraNova-Italic', sans-serif;
+    
+    --font-jost-regular: 'Jost-Regular' , sans-serif;
+    --font-jost-italic: 'Jost-Italic', sans-serif;
+  }
+  
+  .font-ibara {
+    font-family: 'IbaraNova-Regular', sans-serif;
+  }
+  
+  .font-ibaraBold {
+    font-family: 'IbaraNova-Bold', sans-serif;
+    font-size: "20px";
+
+  }
+  
+  .font-ibaraItalic {
+    font-family: 'IbaraNova-Italic', sans-serif;
+  }
+  
+  .font-jostRegular {
+    font-family: 'Jost-Regular', sans-serif;
+  }
+  
+  .font-jostItalic {
+    font-family: 'Jost-Italic', sans-serif;
+  }
+   
