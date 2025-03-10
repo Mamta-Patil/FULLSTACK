@@ -1,0 +1,1 @@
+export const videoText="Watch Our Private Investigation"

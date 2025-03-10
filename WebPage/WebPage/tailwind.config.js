@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-
 const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
@@ -14,7 +13,9 @@ module.exports = withMT({
               "title" : "25px",
               "description":"20px",
               "subtitle":"40px",
-              "inve" :"25px"
+              "inve" :"25px",
+              "arti":"30px",
+              "ft":"15px"
              },
           
             },

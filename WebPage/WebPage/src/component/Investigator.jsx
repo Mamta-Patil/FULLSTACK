@@ -8,7 +8,6 @@ import img3 from  "../assets/img3.svg"
 import inve from "../assets/inve.png"
 const Investigator = () => {
   return (
-    <div>
       <div className="grid grid-cols-[50%_auto] px-10 py-16">
         <div className="contnet">
             <img src={thumb} alt="" className='ms-20' />
@@ -32,12 +31,9 @@ const Investigator = () => {
                 <img src={img3} alt="" className='p-3 bg-[pink] rounded-full m-auto' />
                 <p className='text-inve'> Expert <br /> Investigator <br /> Agents</p>
             </div>
-            <img src={inve} alt=""  className='relative top-40 -left-60 z-10' />
-
+            <img src={inve} alt=""  className='relative top-40 -left-96 z-10' />
         </div>
       </div>
-
-    </div>
   )
 }
 

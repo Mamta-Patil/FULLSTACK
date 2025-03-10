@@ -11,6 +11,15 @@ import About from './About';
 import Services from './Services';
 import Logo from './Logo';
 import Investigator from './Investigator';
+import Video from './Video';
+import Team from './Team';
+import Testimonials from './TestimonialsPage';
+import DedicatedInve from './DedicatedInve';
+import Faq from './Faq';
+import Article from './Article';
+import Contact from './Contact';
+import Footer from './Footer';
+// import DedicatedInve from '../data/DedicatedInve';
 
 const Navbar = () => {
 
@@ -68,6 +77,14 @@ const Navbar = () => {
             <Services />
             <Logo />
             <Investigator />
+            <Video />
+            <Team />
+            <Testimonials />
+            <DedicatedInve />
+            <Faq />
+            <Article />
+            <Contact />
+            <Footer />
         </div>
     );
 };
