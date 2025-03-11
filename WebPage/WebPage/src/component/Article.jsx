@@ -7,7 +7,7 @@ const Article = () => {
             <p className='text-subtitle text-center font-bold'>Get More Update From <br />Our Article</p>
             <div className="grid grid-cols-3 px-10 gap-4">
                 {articledata.map((article, index) => (
-                    <div className='p-4 bg-white shadow-2xl'>
+                    <div className='p-8 bg-white shadow-2xl'>
                         <img src={article.img} alt="" className='w-[100%]' />
                         <div className='flex pt-2'>
                             <p> {article.admin} </p>

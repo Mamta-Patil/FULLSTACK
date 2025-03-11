@@ -3,7 +3,6 @@ import Accordian from './Accordian'
 import faq from "../assets/faq.jpg"
 const Faq = () => {
     return (
-        <div>
             <div className='my-40 bg-blue-gray-200 '>
                 <div className="grid grid-cols-[50%_auto] py-5 mt-36">
                     <div className="image relative  w-[500px]">
@@ -16,7 +15,6 @@ const Faq = () => {
                     </div>
                 </div>
             </div>
-        </div>
     )
 }
 
