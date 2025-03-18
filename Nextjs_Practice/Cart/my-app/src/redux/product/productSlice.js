@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchProducts } from "./productsThunk";
+import { fetchProducts } from "./productThunk";
 
 const productsSlice = createSlice({
   name: "products",
   initialState: {
     items: [],
-    status: "idle", // idle | loading | succeeded | failed
+    status: "idle",
   },
+
   reducers: {},
   extraReducers: (builder) => {
     builder

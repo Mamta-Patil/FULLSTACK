@@ -1,19 +1,9 @@
-// import React from 'react'
 
-// const productList = () => {
-//   return (
-//     <div>
-      
-//     </div>
-//   )
-// }
-
-// export default productList
 "use client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "@/redux/productsThunk";
-import ProductCard from "./ProductCard";
+import { fetchProducts } from "@/redux/product/productThunk";
+import ProductCard from "./productCard";
 
 const ProductList = () => {
   const dispatch = useDispatch();
