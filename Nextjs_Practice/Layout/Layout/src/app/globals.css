@@ -1,10 +1,95 @@
 @import "tailwindcss";
 
+@theme {
+  --font-roman: "IbaraNova-Regular", "sans-serif";
+  --breakpoint-3xl: 1920px;
+  --color-back: #e3ef53;
+  --color-theme: #F5F6E4;
+  --color-dark: #000000;
+  --color-green: #c3cf46;  
+  --color-light: #FFFFFF;
+  --color-avocado-200: oklch(0.98 0.04 113.22);
+  --color-avocado-300: oklch(0.94 0.11 115.03);
+  --color-avocado-400: oklch(0.92 0.19 114.08);
+  --color-avocado-500: oklch(0.84 0.18 117.33);
+  --color-avocado-600: oklch(0.53 0.12 118.34);
+  --ease-fluid: cubic-bezier(0.3, 0, 0, 1);
+  --ease-snappy: cubic-bezier(0.2, 0, 0, 1);
+  /* ... */
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+
+@font-face {
+  font-family: 'IbaraNova-Regular';
+  src: url('/fonts/IbarraRealNova-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IbaraNova-Bold';
+  src: url('/fonts/IbarraRealNova-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IbaraNova-Italic';
+  src: url('/fonts/IbarraRealNova-Italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Jost-Regular';
+  src: url('/fonts/Jost-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Jost-Italic';
+  src: url('/fonts/Jost-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+:root {
+  --font-ibara-regular: 'IbaraNova-Regular' ,sans-serif;
+  --font-ibara-bold: 'IbaraNova-Bold', sans-serif;
+  --font-ibara-italic: 'IbaraNova-Italic', sans-serif;
+  --font-jost-regular: 'Jost-Regular' , sans-serif;
+  --font-jost-italic: 'Jost-Italic', sans-serif;
+}
+
+.font-ibara {
+  font-family: 'IbaraNova-Regular', sans-serif;
+}
+
+.font-ibaraBold {
+  font-family: 'IbaraNova-Bold', sans-serif;
+  font-size: "20px";
+}
+
+.font-ibaraItalic {
+  font-family: 'IbaraNova-Italic', sans-serif;
+}
+
+.font-jostRegular {
+  font-family: 'Jost-Regular', sans-serif;
+}
+
+.font-jostItalic {
+  font-family: 'Jost-Italic', sans-serif;
+}
+ 
+
+/* 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -17,10 +102,10 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
-
+} */
+/* 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
+} */
