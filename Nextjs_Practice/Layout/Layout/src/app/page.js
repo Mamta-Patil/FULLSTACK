@@ -1,10 +1,16 @@
-import Payment from '@/component'
-import React from 'react'
+import Loading from '@/component/product/loading'
+import Product from '@/component/product/product'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
     <div>
-      <Payment />
+      <Suspense fallback={<Loading />}>
+           <Product />
+      </Suspense>
+      {/* <Suspense fallback={<Loading />}>
+       <Description />
+      </Suspense> */}
     </div>
   )
 }
