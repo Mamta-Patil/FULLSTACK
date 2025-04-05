@@ -29,6 +29,7 @@ import { useRouter } from 'next/navigation';
 
 export default function CreateBlogPage() {
   const [name, setName] = useState('');
+  console.log(object)
 //   const [content, setContent] = useState('');
   const router = useRouter();
 

@@ -14,7 +14,7 @@ export default function CreateBlogPage() {
       return;
     }
     await createBlog({ data:{name:name} });
-    router.push('/');
+    router.push('/blog');
   };
 
   return (
