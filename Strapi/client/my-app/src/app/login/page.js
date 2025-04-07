@@ -49,16 +49,32 @@ export default function LoginPage() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-  const handleGitHubLogin = () => {
+  const GITHUB_AUTH_URL = "http://localhost:1337/api/connect/github?redirect=http://localhost:3000/connect/github/redirect";
+
+  const GOOGLE_AUTH_URL = "http://localhost:1337/api/connect/google?redirect=http://localhost:3000/connect/google/redirect";
+  // GITHUB_AUTH_URL=""
+
+  const handleGitHubLogin = async() => {
+    window.location.href = GITHUB_AUTH_URL;
+    // const res = await loginUser(form);
+    // console.log("response",res)
+    // localStorage.setItem("userinfo", JSON.stringify(res.data));
+    // localStorage.setItem('token', res.data.jwt);
     // Redirect user to Strapi GitHub login
-    window.location.href = 'http://localhost:1337/api/auth/github/redirect=http://localhost:3000/github-callback';
+    // window.location.href = 'http://localhost:1337/api/auth/github/redirect=http://localhost:3000/github-callback';
   };
+
+  const handleGoogleLogin=async()=>{
+    window.location.href = GOOGLE_AUTH_URL;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try 
     {
       const res = await loginUser(form);
       console.log("response",res)
+      localStorage.setItem("userinfo",res.data)
       localStorage.setItem('token', res.data.jwt);
       router.push('/blog');
     } 
@@ -99,6 +115,13 @@ export default function LoginPage() {
         >
           Sign in with GitHub
         </button>
+        <button
+          onClick={handleGoogleLogin}
+          className="w-full bg-gray-800 text-white py-2 rounded-lg hover:bg-gray-900 transition"
+        >
+          Sign in Google
+        </button>
+        
 
         {error && <p className="text-red-600 text-center">{error}</p>}
       </div>

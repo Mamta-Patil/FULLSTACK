@@ -29,19 +29,10 @@ import { useRouter } from 'next/navigation';
 
 export default function CreateBlogPage() {
   const [name, setName] = useState('');
-  console.log(object)
-//   const [content, setContent] = useState('');
+
   const router = useRouter();
 
   const handleSubmit = async (e) => {
-    // console.log('Sending to Strapi:', { data: blog });
-    // const res = await fetch('http://localhost:1337/api/products', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ data: blog }),
-    //   });
-    
-    //   return res.json();
     e.preventDefault();
     await createBlog({ name, published: true });
     router.push('/');
@@ -72,16 +63,3 @@ export default function CreateBlogPage() {
     </div>
   );
 }
-
-
-{/* 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Write your blog content here..."
-            rows={6}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div> */}

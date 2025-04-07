@@ -1,8 +1,8 @@
 'use client';
-
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBlog, updateBlog } from '@/lib/api';
+
 export default function EditBlog({ params }) {
   const { id } = params; 
   console.log(id)
@@ -13,7 +13,6 @@ export default function EditBlog({ params }) {
     async function fetchBlog() {
       const blog = await getBlog(id);
       console.log('Fetched blog:', blog); // 👈 Check the response here
-
       setName(blog.name);
     }
     fetchBlog();

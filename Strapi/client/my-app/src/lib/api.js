@@ -68,11 +68,51 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:1337/api/products';
 
-export const getBlogs = async () => {
-  const res = await axios.get(BASE_URL);
-  console.log(res)
-  return res.data.data;
+// export const getBlogs = async () => {
+//   const res = await axios.get(BASE_URL);
+//   console.log(res)
+//   return res.data.data;
+// };
+
+
+export const getblogs = async () => {
+  try {
+    const res = await axios.get('http://localhost:1337/api/products?populate=*');
+    console.log('Fetched:', res.data.data); 
+    // console.log('Fetched:', res.data.images); 
+    return res.data.data
+  } catch (error) {
+    console.error('Fetch failed:', error);
+    return [];
+  }
 };
+
+
+// export const getblogs = async () => {
+//   try {
+//     const res = await axios.get('http://localhost:1337/api/products?populate=*');
+
+//     return res.data.data.map((item) => {
+//       const attrs = item.attributes;
+
+//       return {
+//         documentId: item.id,
+//         name: attrs.name,
+//         createdAt: attrs.createdAt,
+//         image: attrs.image?.data?.map((img) => ({
+//           id: img.id,
+//           name: img.attributes.name,
+//           url: `http://localhost:1337${img.attributes.url}`,
+//         })) || [],
+//       };
+//     });
+//   } catch (error) {
+//     console.error('Fetch failed:', error);
+//     return [];
+//   }
+// };
+
+
 
 export const getBlog = async (documentId) => {
   const res = await axios.get(`${BASE_URL}/${documentId}`);
@@ -82,12 +122,13 @@ export const getBlog = async (documentId) => {
 export const createBlog = async (productData) => {
   const res = await axios.post(BASE_URL, productData,{
     headers:{
-        "Content-Type":"application/json"
+        "Content-Type":"application/json",
+        // "Content-Type": "multipart/form-data"
     }
   });
   return res.data.data;
 };
-
+// 'Authorization': `Bearer ${token}`, //
 export const updateBlog = async (id, data) => {
   const res = await axios.put(`${BASE_URL}/${id}`, { data: {
     name: data.name,
