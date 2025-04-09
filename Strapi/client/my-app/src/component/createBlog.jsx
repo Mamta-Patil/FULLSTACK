@@ -1,65 +1,129 @@
-// 'use client';
-// import { useState } from 'react';
-// import { createBlog } from '@/lib/api';
-// import { useRouter } from 'next/navigation';
-
-// export default function CreateBlogPage() {
-//   const [title, setTitle] = useState('');
-//   const [content, setContent] = useState('');
-//   const router = useRouter();
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     await createBlog({ title, content, published: true });
-//     router.push('/');
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
-//       <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Content" />
-//       <button type="submit">Create</button>
-//     </form>
-//   );
-// }
 'use client';
 import { useState } from 'react';
-import { createBlog } from '@/lib/api';
-import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function CreateBlogPage() {
-  const [name, setName] = useState('');
-
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
+  const [addName, setName] = useState('');
+  const [image, setImage] = useState([]);
+  const handleAddSubmit = async (e) => {
     e.preventDefault();
-    await createBlog({ name, published: true });
-    router.push('/');
+
+    if (!addName.trim() || image.length === 0) {
+      alert('Please enter a product name and select at least one image.');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+
+      // Append selected images to FormData
+      image.forEach((img) => {
+        formData.append('files', img);
+      });
+
+      // Upload images
+      const uploadResponse = await axios.post(
+        'http://localhost:1337/api/upload',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      const uploadedFiles = uploadResponse.data;
+      const imageIds = uploadedFiles.map((file) => file.id);
+
+      // Create product
+      const productResponse = await axios.post(
+        'http://localhost:1337/api/products',
+        {
+          data: {
+            name: addName,
+            image: imageIds,
+          },
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      console.log('Product created successfully:', productResponse.data);
+      alert('Product created successfully!');
+    }
+     catch (error) {
+      alert('An error occurred while creating the product. Please try again.');
+    }
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">Create New Blog Post</h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter blog title"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+<div className="flex justify-center items-center px-4">
+  <div className="w-full max-w-2xl bg-white rounded-2xl p-8">
+    
+    <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+      Add Product
+    </h2>
 
+    <form
+      onSubmit={handleAddSubmit}
+      className="space-y-6"
+      encType="multipart/form-data"
+    >
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+      {/* Product Name */}
+      <div>
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 mb-1"
         >
-          Create Post
-        </button>
-      </form>
-    </div>
+          Product Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={addName}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter product name"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+      </div>
+
+      {/* Image Upload */}
+      <div>
+        <label
+          htmlFor="image"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Upload Images
+        </label>
+        <input
+          type="file"
+          id="addImage"
+          name="image"
+          accept="image/*"
+          multiple
+          onChange={(e) => setImage(Array.from(e.target.files))}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+          required
+        />
+      </div>
+
+      {/* Submit Button */}
+      <button
+        type="submit"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg py-3 px-6 rounded-lg transition duration-300"
+      >
+        Submit
+      </button>
+
+    </form>
+
+  </div>
+</div>
   );
 }

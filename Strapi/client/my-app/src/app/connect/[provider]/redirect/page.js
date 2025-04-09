@@ -50,8 +50,6 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
-// import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 
 const SocialRedirectPage = () => {
   const router = useRouter();
@@ -60,7 +58,7 @@ const SocialRedirectPage = () => {
   useEffect(() => {
     const url = new URL(window.location.href);
     const token = url.searchParams.get('access_token');
-    const provider = url.pathname.includes('google') ? 'google' : 'github'; 
+    const provider = url.pathname.includes('google') ? 'google' : 'github';
 
     console.log(url);
     console.log(token);
@@ -75,17 +73,15 @@ const SocialRedirectPage = () => {
           if (data.jwt && data.user) {
             localStorage.setItem('jwt', data.jwt);
             localStorage.setItem('user', JSON.stringify(data.user));
-            // toast.success('Login successful!', { autoClose: 2000 });
-            setTimeout(() => router.push('/blog'), 2000); 
+            setTimeout(() => router.push('/blog'), 2000);
           } else {
-            // toast.error('Login failed: Invalid JWT or user.');
           }
         })
-        .catch(() => {
-          // toast.error('Email is already taken !');
+        .catch((err) => {
+          console.log(err)
         });
     } else {
-      // toast.error('Email is already taken !');
+      console.log("email is already taken")
     }
   }, []);
 
