@@ -3,25 +3,32 @@ import { useState } from 'react';
 import axios from 'axios';
 
 export default function CreateBlogPage() {
+  const [locale, setLocale] = useState('en');
+  const locales = [
+    { code: 'en', name: 'English' },
+    { code: 'gu-IN', name: 'Gujarati' },
+    { code: 'hi-IN', name: 'Hindi' },
+    { code: 'mr-IN', name: 'Marathi' },
+  ];
   const [addName, setName] = useState('');
   const [image, setImage] = useState([]);
+
+
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!addName.trim() || image.length === 0) {
       alert('Please enter a product name and select at least one image.');
       return;
     }
-
+  
     try {
       const formData = new FormData();
-
-      // Append selected images to FormData
+  
       image.forEach((img) => {
         formData.append('files', img);
       });
-
-      // Upload images
+  
       const uploadResponse = await axios.post(
         'http://localhost:1337/api/upload',
         formData,
@@ -31,13 +38,12 @@ export default function CreateBlogPage() {
           },
         }
       );
-
+  
       const uploadedFiles = uploadResponse.data;
       const imageIds = uploadedFiles.map((file) => file.id);
-
-      // Create product
+  
       const productResponse = await axios.post(
-        'http://localhost:1337/api/products',
+        `http://localhost:1337/api/products?locale=${locale}`, // this line updated
         {
           data: {
             name: addName,
@@ -50,22 +56,88 @@ export default function CreateBlogPage() {
           },
         }
       );
-
+  
       console.log('Product created successfully:', productResponse.data);
       alert('Product created successfully!');
-    }
-     catch (error) {
+    } catch (error) {
       alert('An error occurred while creating the product. Please try again.');
     }
   };
+  
+
+  // const handleAddSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!addName.trim() || image.length === 0) {
+  //     alert('Please enter a product name and select at least one image.');
+  //     return;
+  //   }
+
+  //   try {
+  //     const formData = new FormData();
+
+  //     // Append selected images to FormData
+  //     image.forEach((img) => {
+  //       formData.append('files', img);
+  //     });
+
+  //     // Upload images
+  //     const uploadResponse = await axios.post(
+  //       'http://localhost:1337/api/upload',
+  //       formData,
+  //       {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       }
+  //     );
+
+  //     const uploadedFiles = uploadResponse.data;
+  //     const imageIds = uploadedFiles.map((file) => file.id);
+
+  //     // Create product
+  //     const productResponse = await axios.post(
+  //       'http://localhost:1337/api/products',
+  //       {
+  //         data: {
+  //           name: addName,
+  //           image: imageIds,
+  //         },
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       }
+  //     );
+
+  //     console.log('Product created successfully:', productResponse.data);
+  //     alert('Product created successfully!');
+  //   }
+  //    catch (error) {
+  //     alert('An error occurred while creating the product. Please try again.');
+  //   }
+  // };
 
   return (
 <div className="flex justify-center items-center px-4">
   <div className="w-full max-w-2xl bg-white rounded-2xl p-8">
-    
+  <label htmlFor="locale" className="text-white mr-2">Select Language:</label>
+        <select
+          onChange={(e) => setLocale(e.target.value)}
+          className="p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500"
+        >
+          {locales.map((locale) => (
+            <option key={locale.code} value={locale.code}>
+              {locale.name}
+            </option>
+          ))}
+        </select>
+
     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
       Add Product
     </h2>
+    <p className="text-sm mt-2 text-gray-600">Selected language : {locale}</p>
 
     <form
       onSubmit={handleAddSubmit}

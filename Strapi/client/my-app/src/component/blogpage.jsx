@@ -1,13 +1,12 @@
 "use client";
 import { useEffect, useState } from 'react';
-import { getblogs } from '@/lib/api';
+import { deleteBlog, getblogs } from '@/lib/api';
 import Link from 'next/link';
-import { handleDeleteAction } from '@/app/blog/action';
-// import { addBlog } from '@/app/create/action';
 
 export default function BlogPage() {
   const [blogs, setBlogs] = useState([]);
   const [locale, setLocale] = useState('en');
+
   const locales = [
     { code: 'en', name: 'English' },
     { code: 'gu-IN', name: 'Gujarati' },
@@ -15,19 +14,25 @@ export default function BlogPage() {
     { code: 'mr-IN', name: 'Marathi' },
   ];
 
-  //   useEffect(() => {
-  //     const fetchBlogs = async () => {
-  //       const data = await getblogs();
-  //       setBlogs(data);
-  //     };
-  //     fetchBlogs(locale);
-  //   }, [locale]);
+  const handleDeleteAction = async (productId) => {
+    try {
+      console.log("producID:",productId)
+       await deleteBlog(productId,locale);
+      // console.log("Deleted:", res);
+
+      // const updatedBlogs = await getblogs(locale);
+      // setBlogs(updatedBlogs || []);
+      alert('Blog deleted successfully.');
+    } catch (error) {
+      console.error('Error deleting blog:', error);
+      alert('An error occurred while deleting the blog.');
+    }
+  };
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      // console.log("local",locale)
-      const data = await getblogs(locale); // pass selected locale here
-      console.log("local :::::::::::::::           ",locale)
+      const data = await getblogs(locale); 
+      localStorage.setItem('locale', locale);
       setBlogs(data);
     };
     fetchBlogs();
@@ -35,58 +40,17 @@ export default function BlogPage() {
 
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-6">
-      {/* // Inside BlogPage component, above the blog listing */}
-{/* <form action={addBlog} className=" p-4 rounded-lg space-y-4 text-black">
-  
-  <h3>  Add Blog</h3>
-  <input type="hidden" name="locale" value={locale} />
-  
-  <div>
-    <label className="block">Title:</label>
-    <input
-      type="text"
-      name="name"
-      required
-      className="w-full p-2 rounded  border border-gray-700"
-    />
-  </div>
-
-  <div>
-    <label className="block">Image URL:</label>
-    <input
-      type="text"
-      name="image"
-      className="w-full p-2 rounded border border-gray-700"
-    />
-  </div>
-
-  <button type="submit" className="bg-teal-600 border-2 border-black hover:bg-teal-700 px-4 py-2 rounded text-white">
-    Add Blog
-  </button>
-</form> */}
-
-{/* 
-      <select value={locale} onChange={(e) => setLocale(e.target.value)}>
-        <option value="en">English</option>
-        <option value="hi-IN">Hindi</option>
-        <option value="gu-IN">Gujarati</option>
-        <option value="mr-IN">Marathi</option>
-      </select> */}
-        {/* <Link href={"/create"}>  Add Blog </Link> */}
-
-       <label htmlFor="locale" className="text-white mr-2">Select Language:</label>
-        <select
-          // id="locale"
-          // value={setLocale}
-          onChange={(e) => setLocale(e.target.value)}
-          className="p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500"
-        >
-          {locales.map((locale) => (
-            <option key={locale.code} value={locale.code}>
-              {locale.name}
-            </option>
-          ))}
-        </select>
+      <label htmlFor="locale" className="text-white mr-2">Select Language:</label>
+      <select
+        onChange={(e) => setLocale(e.target.value)}
+        className="p-2 rounded-md bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-teal-500"
+      >
+        {locales.map((locale) => (
+          <option key={locale.code} value={locale.code}>
+            {locale.name}
+          </option>
+        ))}
+      </select>
 
       {blogs.map((b) => (
         <div
@@ -123,7 +87,6 @@ export default function BlogPage() {
             ) : (
               <div className="mt-2 text-gray-500 italic">No images available</div>
             )}
-
           </div>
 
           <div className="flex gap-3">
@@ -134,15 +97,13 @@ export default function BlogPage() {
               Edit
             </Link>
 
-            <form action={handleDeleteAction}>
-              <input type="hidden" name="id" value={b.documentId} />
-              <button
-                type="submit"
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm"
-              >
-                Delete
-              </button>
-            </form>
+            <button
+              type="button"
+              onClick={() => handleDeleteAction(b.documentId)}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm"
+            >
+              Delete
+            </button>
           </div>
         </div>
       ))}

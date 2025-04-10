@@ -1,15 +1,33 @@
 'use server';
-import { deleteBlog } from '@/lib/api';
+import { deleteBlog, getBlog, getblogs } from '@/lib/api';
 import { redirect } from 'next/navigation';
 
-export async function handleDeleteAction(formData) {
-  const documentId = formData.get('id');
-  await deleteBlog(documentId);
-  redirect('/blog');
-}
+// export async function handleDeleteAction(formData) {
+//   const documentId = formData.get('id');
+//   console.log("documentId",documentId)
+
+//   await deleteBlog(documentId);
+//   redirect('/blog');
+// }
 
 
 
+export const handleDeleteAction = async (productId) => {
+  try {
+    const isDeleted = await deleteBlog(productId);
+    if (!isDeleted) {
+      const updatedProducts = await getblogs();
+      setProducts(updatedProducts || []);
+    }
+     else {
+      console.error('Failed to delete product:', productId);
+      alert('Failed to delete product. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    alert('An error occurred while deleting the product.');
+  }
+};
 // export const deleteBlog = async (documentId) => {
 //   try {
 //     const mainBlog = await getBlog(documentId); // This includes localizations
