@@ -63,7 +63,11 @@ export default function BlogPage() {
               className="text-xl font-semibold text-gray-800 hover:underline"
             >
               {b.name}
+
             </Link>
+            {b.price}
+
+            <p>Category : {b.category ?b.category.name : "no category"}</p>
 
             {b.image && Array.isArray(b.image) && b.image.length > 0 ? (
               <div className="mt-4 flex flex-wrap gap-4">

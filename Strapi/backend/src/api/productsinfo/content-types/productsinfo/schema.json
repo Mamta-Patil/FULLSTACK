@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "productsinfos",
+  "info": {
+    "singularName": "productsinfo",
+    "pluralName": "productsinfos",
+    "displayName": "productsinfo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    }
+  }
+}

@@ -39,6 +39,24 @@
           "localized": true
         }
       }
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::category.category",
+      "inversedBy": "products"
+    },
+    "custom": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::custom.custom",
+      "inversedBy": "products"
+    },
+    "stock": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "integer"
     }
   }
 }
