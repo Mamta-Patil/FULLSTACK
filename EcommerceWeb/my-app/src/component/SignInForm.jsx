@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
-export default function SignUpForm() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+export default function SignInForm() {
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -15,34 +16,25 @@ export default function SignUpForm() {
     e.preventDefault();
     setError('');
     try {
-      const res = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const result = await signIn('credentials', {
+        redirect: false,
+        email: formData.email,
+        password: formData.password,
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Registration failed');
+      if (result.error) {
+        setError(result.error);
+      } else {
+        router.push('/chat');
       }
-      router.push('/auth/signin');
     } catch (err) {
-      setError(err.message);
+      setError('An unexpected error occurred');
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-4">
-      <h2 className="text-2xl mb-4">Sign Up</h2>
+      <h2 className="text-2xl mb-4">Sign In</h2>
       {error && <p className="text-red-500">{error}</p>}
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        value={formData.name}
-        onChange={handleChange}
-        className="w-full p-2 mb-4 border rounded"
-        required
-      />
       <input
         type="email"
         name="email"
@@ -62,8 +54,14 @@ export default function SignUpForm() {
         required
       />
       <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
-        Sign Up
+        Sign In
       </button>
+      <p className="mt-4">
+        Don&apos;t have an account?{' '}
+        <a href="/auth/signup" className="text-blue-500">
+          Sign Up
+        </a>
+      </p>
     </form>
   );
 }

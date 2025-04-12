@@ -1,37 +1,42 @@
-import { getDb } from "../../../lib/mongodb";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../../lib/nextauth';
+import connectMongoDB from '../../../lib/mongodb';
+import Purchase from '@/model/Purchase';
 
 export async function POST(request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-      });
-    }
-
-    const { itemName } = await request.json();
-    if (!itemName) {
-      return new Response(JSON.stringify({ error: "Item name is required" }), {
-        status: 400,
-      });
-    }
-
-    const db = await getDb();
-    await db.collection("purchases").insertOne({
+    const { item, price } = await request.json();
+    await connectMongoDB();
+    const purchase = new Purchase({
       userId: session.user.id,
-      itemName,
-      purchaseDate: new Date(),
+      item,
+      price,
     });
-
-    return new Response(JSON.stringify({ message: "Purchase added" }), {
-      status: 201,
-    });
+    
+    await purchase.save();
+    return NextResponse.json({ message: 'Purchase recorded' }, { status: 201 });
   } catch (error) {
-    console.error("Error adding purchase:", error);
-    return new Response(JSON.stringify({ error: "Something went wrong" }), {
-      status: 500,
-    });
+    console.error('Purchase error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  try {
+    await connectMongoDB();
+    const purchases = await Purchase.find({ userId: session.user.id });
+    return NextResponse.json(purchases, { status: 200 });
+  } catch (error) {
+    console.error('Fetch purchases error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

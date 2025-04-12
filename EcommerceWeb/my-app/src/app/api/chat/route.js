@@ -1,51 +1,37 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { personalizeResponse } from "../../../../lib/chatbotLogic";
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+import { NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../../../lib/nextauth';
+import connectMongoDB from '../../../lib/mongodb';
+import Purchase from '@/model/Purchase';
+// import Purchase from '../../../models/Purchase';
 
 export async function POST(request) {
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   try {
-    console.log("Received POST request to /api/chat");
-    const { message, history, userId } = await request.json(); // Added userId
-    console.log("Request body:", { message, history, userId });
+    const { message } = await request.json();
+    await connectMongoDB();
+    const purchases = await Purchase.find({ userId: session.user.id });
+    const purchaseSummary = purchases.length
+      ? `The user has made ${purchases.length} purchases: ${purchases
+          .map((p) => `${p.item} for $${p.price}`)
+          .join(', ')}.`
+      : 'The user has no purchase history.';
 
-    // Validate history roles
-    const validRoles = ["user", "model", "function", "system"];
-    history.forEach((msg, index) => {
-      if (!validRoles.includes(msg.role)) {
-        throw new Error(`Invalid role at index ${index}: ${msg.role}`);
-      }
-    });
-
-    const chat = model.startChat({
-      history: history.map((msg) => ({
-        role: msg.role,
-        parts: [{ text: msg.content }],
-      })),
-    });
-
-    console.log("Sending message to Gemini:", message);
-    const result = await chat.sendMessage(message);
-    const response = await result.response;
-    const geminiText = response.text();
-    console.log("Gemini response:", geminiText);
-
-    // Personalize response if user is logged in
-    const finalResponse = await personalizeResponse(message, userId, geminiText);
-
-    return new Response(JSON.stringify({ reply: finalResponse }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
+    const prompt = `
+      You are a friendly chatbot. Personalize your response based on the user's purchase history: ${purchaseSummary}
+      Respond to the user's message: "${message}"
+    `;
+    const result = await model.generateContent(prompt);
+    const response = await result.response.text();
+    return NextResponse.json({ response }, { status: 200 });
   } catch (error) {
-    console.error("Error in chat API:", error);
-    return new Response(
-      JSON.stringify({ error: error.message || "Something went wrong" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    console.error('Chat error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
