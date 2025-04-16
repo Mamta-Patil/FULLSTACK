@@ -2,18 +2,42 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:1337/api/products';
 
-export const createProduct = async (productData) => {
-  const res = await axios.post(BASE_URL, { data: productData }, {
-    headers: {
-      "Content-Type": "application/json",
-    }
+// export const createProduct = async (productData) => {
+//   const res = await axios.post(BASE_URL, { data: productData }, {
+//     headers: {
+//       "Content-Type": "application/json",
+//     }
+//   });
+//   return res.data.data;
+// };
+
+// import axios from "axios";
+
+// const BASE_URL = "http://localhost:1337/api/products";
+
+export const createProduct = async (productData, imageFiles) => {
+  const formData = new FormData();
+
+  // Add product data
+  formData.append("data", JSON.stringify(productData));
+
+  // Add image files (can be multiple)
+  imageFiles.forEach((file) => {
+    formData.append("files.Image", file); // 'Image' should match the name in your Strapi model
   });
-  return res.data.data;
+
+  const res = await axios.post(BASE_URL, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return res.data;
 };
 
 
 export const getproducts = async () => {
-  const res = await axios.get(`${BASE_URL}`);
+  const res = await axios.get("http://localhost:1337/api/products?populate=*");
   return res.data?.data || [];
 };
 

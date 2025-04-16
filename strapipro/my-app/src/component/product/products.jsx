@@ -91,13 +91,36 @@ const products = () => {
                                             <input type="checkbox" className="h-4 w-4" />
                                         </td>
                                         <td className="p-3">
-                                            <img src={item.image} alt="Product" className="w-12 h-12 object-cover" />
+                                               {item.image && Array.isArray(item.image) && item.image.length > 0 ? (
+              <div className="mt-4 flex flex-wrap gap-4">
+                {item.image.map((img, imgIndex) => {
+                  const imageUrl =
+                    img?.formats?.medium?.url ||
+                    img?.formats?.small?.url ||
+                    img?.formats?.thumbnail?.url ||
+                    img?.url;
+
+                  return (
+                    <img
+                      key={imgIndex}
+                      src={`http://localhost:1337${imageUrl}`}
+                      alt={img.name || "Product Image"}
+                      className="w-28 h-14 object-cover rounded-full border"
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="mt-2 text-gray-500 italic">No images available</div>
+            )}
+
+                                            {/* <img src={item.image} alt="Product" className="w-12 h-12 object-cover" /> */}
                                         </td>
                                         <td className="p-3">{item.id}</td>
-                                        <td className="p-3">{item.Name}</td>
-                                        <td className="p-3">{item.Price}</td>
-                                        <td className="p-3">{item.Stock}</td>
-                                        <td className="p-3">{item.Category}</td>
+                                        <td className="p-3">{item.name}</td>
+                                        <td className="p-3">{item.price}</td>
+                                        <td className="p-3">{item.stock}</td>
+                                        <td className="p-3">{item.category.Name}</td>
                                         <td className="p-3 flex text-2xl text-blue-700">
                                             <Link
                                                 href={`/product/edit/${item.documentId}`}

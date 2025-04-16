@@ -17,10 +17,10 @@
       "target": "api::product.product",
       "mappedBy": "category"
     },
-    "name": {
+    "Name": {
       "type": "string"
     },
-    "fabric": {
+    "Fabric": {
       "type": "string"
     }
   }

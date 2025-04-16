@@ -18,7 +18,6 @@ export default function LoginPage() {
     {
       const res = await loginUser(form);
       localStorage.setItem('token', res.data.jwt);
-
       localStorage.setItem("user",JSON.stringify(res.data.user))
       alert("login scucceessfully")
       router.push('/dashboard');
