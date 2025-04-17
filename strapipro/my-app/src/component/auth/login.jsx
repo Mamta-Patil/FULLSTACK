@@ -17,6 +17,7 @@ export default function LoginPage() {
     try 
     {
       const res = await loginUser(form);
+      console.log("token",res)
       localStorage.setItem('token', res.data.jwt);
       localStorage.setItem("user",JSON.stringify(res.data.user))
       alert("login scucceessfully")

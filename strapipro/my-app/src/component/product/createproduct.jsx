@@ -6,20 +6,37 @@ import axios from "axios";
 export default function CreateProduct() {
   const router = useRouter();
   const [token, setToken] = useState(null);
+
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
   const [price, setPrice] = useState("");
   const [stock, setStock] = useState("");
-  const [image, setImage] = useState([]); // Store File objects
-  const [imagePreviews, setImagePreviews] = useState([]); // Store preview URLs
+  const [image, setImage] = useState([]); // File objects
+  const [imagePreviews, setImagePreviews] = useState([]); // Preview URLs
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch token
+  // Fetch token and categories
   useEffect(() => {
-    const storedToken = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    const storedToken =
+      typeof window !== "undefined" ? localStorage.getItem("token") : null;
     setToken(storedToken);
     console.log("Fetched token:", storedToken);
+
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:1337/api/categories");
+        setCategoryList(response.data.data);
+        console.log("Fetched categories:", response.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
   }, []);
 
   const handleImageChange = (e) => {
@@ -41,39 +58,15 @@ export default function CreateProduct() {
     setIsLoading(true);
     setError(null);
 
-    console.log("JWT Token:", token);
-    console.log("Selected files:", image.map((img) => ({ name: img.name, size: img.size })));
-
     try {
       // Validate token
-      try {
-        const response = await axios.get("http://localhost:1337/api/products", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("Token is valid. Products response:", response.data);
-      } catch (error) {
-        console.error("Token validation failed:", error.response?.data || error.message);
-        throw new Error("Invalid or expired token. Please log in again.");
-      }
+      await axios.get("http://localhost:1337/api/products", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       // Upload images
       const formData = new FormData();
-      image.forEach((img, index) => {
-        console.log(`Appending file ${index}:`, img.name, img.size);
-        formData.append("files", img);
-      });
-
-      console.log("FormData contents:", [...formData.entries()]);
-
-      console.log("name",name)
-      console.log("name",category)
-      console.log("name",price)
-      console.log("name",stock)
-      console.log("name",image)
-
-
+      image.forEach((img) => formData.append("files", img));
 
       const uploadResponse = await axios.post(
         "http://localhost:1337/api/upload",
@@ -86,24 +79,19 @@ export default function CreateProduct() {
         }
       );
 
-      const uploadedFiles = uploadResponse.data;
-      console.log("Uploaded files:", uploadedFiles);
-      const imageIds = uploadedFiles.map((file) => file.id);
-
- 
-      
+      const imageIds = uploadResponse.data.map((file) => file.id);
 
       // Create product
       const productResponse = await axios.post(
         "http://localhost:1337/api/products",
         {
-            data: {
-              name: name,
-              category: category,
-              price: Number(price),
-              stock: Number(stock),
-              image: imageIds,
-            }
+          data: {
+            name,
+            category: selectedCategory,
+            price,
+            stock,
+            image: imageIds,
+          },
         },
         {
           headers: {
@@ -113,15 +101,13 @@ export default function CreateProduct() {
         }
       );
 
-      console.log("Product created successfully:", productResponse.data);
       alert("Product created successfully!");
       router.push("/product");
     } catch (error) {
-      console.error("Error creating product:", error.response?.data || error);
-      console.error("Full error object:", error);
+      console.error("Error creating product:", error);
       const errorMessage = error.response?.data?.error?.message || error.message;
       if (error.response?.status === 500) {
-        setError(`Server error while uploading files: ${errorMessage}. Check Strapi logs for details.`);
+        setError(`Server error while uploading files: ${errorMessage}`);
       } else {
         setError(`Failed to create product: ${errorMessage}`);
       }
@@ -130,7 +116,6 @@ export default function CreateProduct() {
     }
   };
 
-  // Clean up preview URLs
   useEffect(() => {
     return () => {
       imagePreviews.forEach((preview) => URL.revokeObjectURL(preview));
@@ -167,17 +152,25 @@ export default function CreateProduct() {
             disabled={isLoading}
           />
         </div>
+
         <div>
           <label className="block mb-1 font-medium text-gray-700">Category</label>
-          <input
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
             className="w-full border px-4 py-2 rounded-md"
             required
             disabled={isLoading}
-          />
+          >
+            <option value="">Select a category</option>
+            {categoryList.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat?.name || "Unnamed Category"}
+              </option>
+            ))}
+          </select>
         </div>
+
         <div>
           <label className="block mb-1 font-medium text-gray-700">Price</label>
           <input
@@ -189,20 +182,29 @@ export default function CreateProduct() {
             disabled={isLoading}
           />
         </div>
+
         <div>
-          <label
-            htmlFor="image"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Upload Image
+          <label className="block mb-1 font-medium text-gray-700">Stock</label>
+          <input
+            type="number"
+            value={stock}
+            onChange={(e) => setStock(e.target.value)}
+            className="w-full border px-4 py-2 rounded-md"
+            required
+            disabled={isLoading}
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">
+            Upload Images
           </label>
           <input
             type="file"
-            id="addImage"
-            name="Image"
             accept="image/*"
+            multiple
             onChange={handleImageChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+            className="w-full border px-4 py-2 rounded-md"
             required
             disabled={isLoading}
           />
@@ -219,21 +221,13 @@ export default function CreateProduct() {
             </div>
           )}
         </div>
-        <div>
-          <label className="block mb-1 font-medium text-gray-700">Stock</label>
-          <input
-            type="number"
-            value={stock}
-            onChange={(e) => setStock(e.target.value)}
-            className="w-full border px-4 py-2 rounded-md"
-            required
-            disabled={isLoading}
-          />
-        </div>
+
         <button
           type="submit"
           className={`w-full py-3 rounded-lg text-white ${
-            isLoading ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+            isLoading
+              ? "bg-green-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
           }`}
           disabled={isLoading}
         >
