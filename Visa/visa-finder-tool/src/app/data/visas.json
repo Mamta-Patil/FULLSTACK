@@ -1,0 +1,56 @@
+[
+    {
+      "id": 1,
+      "country": "USA",
+      "purpose": "study",
+      "name": "F-1 Student Visa",
+      "description": "For full-time students enrolled in an accredited institution.",
+      "duration": "Duration of study program",
+      "eligibility": "Acceptance at a SEVP-approved school, proof of funds, intent to return home."
+    },
+    {
+      "id": 2,
+      "country": "USA",
+      "purpose": "work",
+      "name": "H-1B Work Visa",
+      "description": "For professionals in specialty occupations.",
+      "duration": "Up to 3 years, extendable to 6 years",
+      "eligibility": "Job offer from a U.S. employer, relevant degree or experience."
+    },
+    {
+      "id": 3,
+      "country": "USA",
+      "purpose": "travel",
+      "name": "B-2 Tourist Visa",
+      "description": "For tourism, vacation, or visiting family.",
+      "duration": "Up to 6 months",
+      "eligibility": "Proof of travel plans, sufficient funds, intent to return home."
+    },
+    {
+      "id": 4,
+      "country": "Canada",
+      "purpose": "study",
+      "name": "Study Permit",
+      "description": "For students attending a designated learning institution.",
+      "duration": "Duration of study program",
+      "eligibility": "Acceptance at a DLI, proof of funds, no criminal record."
+    },
+    {
+      "id": 5,
+      "country": "Canada",
+      "purpose": "work",
+      "name": "Work Permit",
+      "description": "For temporary workers with a job offer.",
+      "duration": "Varies based on job contract",
+      "eligibility": "Valid job offer, LMIA (if required), qualifications."
+    },
+    {
+      "id": 6,
+      "country": "Canada",
+      "purpose": "travel",
+      "name": "Visitor Visa",
+      "description": "For tourism or business visits.",
+      "duration": "Up to 6 months",
+      "eligibility": "Proof of ties to home country, sufficient funds."
+    }
+  ]
