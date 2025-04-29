@@ -1,5 +1,5 @@
 {
-  "name": "visa",
+  "name": "visa-chatbot",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "jspdf": "^2.5.1",
+    "@google/generative-ai": "^0.24.0",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

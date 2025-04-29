@@ -1,5 +1,7 @@
 // import Image from "next/image";
 
+import Chat from "./component/chat";
+
 // export default function Home() {
 //   return (
 //     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -102,12 +104,18 @@
 //   );
 // }
 
-import Chatbot from '../components/Chatbot';
+// import Chat from './components/Chat';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-      <Chatbot />
-    </div>
+    <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gray-100">
+      <h1 className="text-4xl font-bold text-blue-600 mb-4">
+        VisaBot: Your Visa Guide
+      </h1>
+      <p className="text-lg text-gray-600 mb-6 text-center max-w-2xl">
+        Ask VisaBot about visa types, requirements, or application steps in English, Spanish, or Hindi. Use text or voice!
+      </p>
+      <Chat />
+    </main>
   );
 }

@@ -27,20 +27,23 @@
 //     </html>
 //   );
 // }
-import '../app/globals.css';
-import Head from 'next/head';
+import './globals.css';
+
+export const metadata = {
+  title: 'VisaBot - Visa Application Chatbot',
+  description: 'Get help with visa applications in your language!',
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <title>Visa Application Chatbot</title>
-        <meta name="description" content="A smart chatbot for visa application assistance" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <body className="bg-gray-100 font-sans">
-        {children}
-      </body>
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded"
+          rel="stylesheet"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
